@@ -1,0 +1,586 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,10pt]{article} 
+
+\usepackage[czech]{babel} % čeština
+\usepackage{tabularx}
+\usepackage{footnote}
+
+\usepackage{amsmath}
+\usepackage{mathtools}
+%%\usepackage{matrix}
+
+\usepackage{upgreek} %% stojatá řecká písmena!
+
+\usepackage{fontspec} % fonty
+\defaultfontfeatures{Mapping=tex-text}
+%\setmainfont{Calibri-Light} % Main document font
+%\setmainfont{Lucida Grande}
+
+\usepackage{xunicode,xltxtra,url,parskip} % Formatting packages
+
+\usepackage{fancyhdr}
+
+%\usepackage[usenames,dvipsnames]{xcolor} % Required for specifying custom colors
+
+\usepackage[big]{layaureo} % Margin formatting of the A4 page, an alternative to layaureo
+                           % can be \usepackage{fullpage} To reduce the height of the top
+                           % margin uncomment:
+                           % \addtolength{\voffset}{-1.3cm}
+\geometry{left=15mm,right=15mm}
+
+\usepackage{hyperref} % Required for adding links	and customizing them
+%\definecolor{linkcolour}{rgb}{0,0.5,0.3} % Link color
+%\hypersetup{colorlinks,breaklinks,urlcolor=linkcolour,linkcolor=linkcolour} % Set link colors throughout the document
+
+\usepackage{titlesec} % Used to customize the \section command
+\titleformat{\section}{\bf\raggedright}{\thesection.~}{0em}{}
+\titlespacing{\section}{0pt}{3pt}{3pt} % Spacing around sections
+\titleformat{\subsection}{\bf\raggedright}{\thesubsection~}{0em}{}
+
+% PDF settings
+\author{Bc. Jan Hladěna}
+\hypersetup
+{
+    pdfauthor={Bc. Jan Hladěna},
+    pdfsubject={KNUMA - Zápočtový úkol, sada 3}, 
+    pdftitle={KNUMA - Zápočtový úkol, sada 3}
+}
+
+\lhead{\textsc{K-AI2-1 KNUMA - Zápočtový úkol, sada 3 - LS 2015/16}}
+\rhead{\href{mailto:jan.hladena@uhk.cz}{\textsc{Jan Hladěna}, I1500705}}
+\cfoot{}
+\renewcommand{\headrulewidth}{0.4pt}
+%\renewcommand{\footrulewidth}{0.4pt}
+
+\def\doubleunderline#1{\underline{\underline{#1}}}
+\def\d#1{\,\mathop{\mathrm{d}#1}}
+
+\usepackage{chngcntr}
+
+\counterwithin*{equation}{section}
+\counterwithin*{equation}{subsection}
+
+\begin{document}
+\pagestyle{fancy}
+
+%\font\fb=''[cmr10]'' % Change the font of the \LaTeX command under the skills section
+
+%----------------------------------------------------------------------------------------
+% ZÁPOČET
+%----------------------------------------------------------------------------------------
+
+\section{Řešte úlohy týkající se interpolace.}
+\label{sec:lagrange}
+\par Zvoleno zadání a) Napište Lagrangerův interpolační polynom $L(x)$, který interpoluje
+hodnoty
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		$x$ & 1,2 & 1,8 & 2,5 \\
+		\hline
+		$f(x)$ & 2,847 & 1,680 & 0,039 \\
+		\hline
+	\end{tabular}
+\end{center}
+
+a~použijte ho pro~odhad $f(1,5)$ a~$f(2,0)$. 
+
+%%%% Výpočet
+
+\par Lagrangerova metoda konstrukce interpolačního polynomu sestává z~dílčích konstrukcí
+fundamentálních polynomů $n$-tého stupňě $l_i(x), i=0,\dots,n$, pro~které platí
+
+\[l_i(x_j)= 
+\begin{dcases}
+    {~}0, & i\neq{j},\\
+    {~}1, & i=j.\\
+\end{dcases}
+\]
+
+\par Kořeny každého takového fundamentálního polynomu $l_i(x)$ jsou pak
+$x_0, x_1, \dots, x_{n-1}, x_n$, tedy platí
+
+\begin{equation}
+l_i(x)=C_i\cdot(x-x_0)(x-x_1)\dots(x-x_{i-1})(x-x_{i+1})\dots(x-x_{n-1})(x-x_n),
+\end{equation}
+
+přičemž podmínka $l_i(x_i)=1$ bude splněna, pokud
+
+\begin{equation}
+C_i=\dfrac{1}{(x_i-x_0)(x_i-x_1)\dots(x-x_{i-1})(x-x_{i+1})\dots(x_i-x_{n-1})(x_i-x_n)}.
+\end{equation}
+
+\par Potom je fundamentální polynom $l_i(x)$
+
+\begin{equation}
+\label{eq:li}
+l_i(x)=\dfrac{(x-x_0)(x-x_1)\dots(x-x_{i-1})(x-x_{i+1})\dots(x-x_{n-1})(x-x_n)}
+{(x_i-x_0)(x_i-x_1)\dots(x-x_{i-1})(x-x_{i+1})\dots(x_i-x_{n-1})(x_i-x_n)}.
+\end{equation}
+
+\par Tento polynom nabývá nulové hodnoty ve~všech uzlech, kromě jediného, ve~kterém
+nabývá hodnoty 1. Celková hodnota lineární kombinace fundamentálních polynomů v~$i$-tém
+uzlu je určena pouze odpovídajícím $i$-tým fundamentálním polynomem $l_i(x)$, zbylé
+polynomy výsledek neovlivní. Lagrangerův interpolační polynom $L_n(x)$ má potom tvar
+
+\begin{equation}
+\label{eq:Ln}
+L_n(x)=\sum_{i=0}^{n}y_{i}l_{i}(x).
+\end{equation}
+
+\subsection{Konstrukce Lagrangerova polynomu}
+\par Vytvoření odpovídajících fundamentálních polynomů ze~zadané tabulky lze realizovat
+dosazením do~rovnice (\ref{eq:li}):
+
+\[\arraycolsep=1.4pt\def\arraystretch{2.4}
+\begin{array}{cclcl}
+l_0(x)&=&\dfrac{(x-1,8)(x-2,5)}{(1,2-1,8)(1,2-2,5)}&=&\dfrac{5}{39}\cdot(10x^2-43x+45)\\
+l_1(x)&=&\dfrac{(x-1,2)(x-2,5)}{(1,8-1,2)(1,8-2,5)}&=&-\dfrac{50}{21}\cdot(x^2-3,7x+3)\\
+l_2(x)&=&\dfrac{(x-1,2)(x-1,8)}{(2,5-1,2)(2,5-1,8)}&=&\dfrac{4}{91}\cdot(25x^2-75x+54)\\
+\end{array}
+\]
+
+\newpage
+\par a~jejich následné dosazení do~vztahu (\ref{eq:Ln}) vede k~získání výsledného
+Lagrangerova polynomu stupně $n=2$:
+
+\[
+L_2=2,847\cdot{l_0(x)}+1,680\cdot{l_1(x)}+0,039\cdot{l_2(x)}
+\]
+
+\[
+L_2 = 2,847\cdot\dfrac{5\cdot(10x^2-43x+45)}{39}
++1,680\cdot\dfrac{-50\cdot(x^2-3,7x+3)}{21}
++0,039\cdot\dfrac{4\cdot(25x^2-75x+54)}{91}
+\]\\
+
+\par Hledaný Lagrangerův interpolační polynom je
+\doubleunderline{$L_2(x)=-0,307143x^2-1,02357x+4,51757$}. \\
+
+\subsection{Odhad podle získaného Lagrangerova polynomu}
+\par Výpočet $L_2(x)$ pro~zadané hodnoty $f(1,5)$ a~$f(2,0)$: \\
+
+\par $L_2(1,5) = -0,307143\cdot(1,5)^2-1,02357\cdot(1,5)+4,51757 =$
+\doubleunderline{$2,29114$}
+
+\par  $L_2(2,0) = -0,307143\cdot(2)^2-1,02357\cdot(2)+4,51757 =$
+\doubleunderline{$1,24186$} \\
+
+\par Ověření v~prostředí \texttt{MATLAB} s~využitím funkce \texttt{lagrange.m}
+z~\path{N:\UKAZKY\Prazak\NUMA\B_cviceni\cv05\matlab}:
+
+\begin{verbatim}
+>> x = [ 1.2 1.8 2.5 ];
+>> y = [ 2.847 1.680 0.039 ];
+>> u = [ 1.5 2.0 ];
+>> v = lagrange(x, y, u)
+
+v =
+    2.2911    1.2419
+\end{verbatim}
+
+%----------------------------------------------------------------------------------------
+\newpage
+\section{Řešte úlohy týkající se numerické integrace.}
+
+\par Zvoleno zadání c) Pomocí lichoběžníkového i~Simpsonova pravidla určete aproximaci
+určitého integrálu
+
+$$\int_{0}^{1}\sqrt{\cos{x}}\d{x}$$
+
+\par Použijte $n=10$ a~pro~lichoběžníkové pravidlo odhadněte chybu. \\
+
+%%%% Výpočet
+
+\par Pomocné derivace: \\
+
+$f'(x)=\dfrac{1}{2}\cdot\dfrac{1}{\sqrt{\cos{x}}}\cdot({-\sin{x}})=
+-\dfrac{\sin{x}}{2\cdot\sqrt{\cos{x}}}$
+
+$f''(x)=-\dfrac{1}{2}\cdot\left(\dfrac{\sin{x}}
+{\sqrt{\cos{x}}}\right)'=-\dfrac{1}{2}\cdot\dfrac{\sqrt{\cos{x}}(\sin{x})'
+-\sin{x}(\sqrt{\cos{x}})'}{\cos{x}}$
+
+$f''(x)=-\dfrac{1}{2}\cdot\dfrac{\sqrt{\cos{x}}\cdot(-\sin{x})
+-\left(\dfrac{(\cos{x})'}{2\cdot\sqrt{\cos{x}}}\right)}{\cos{x}}=
+\dfrac{1}{2}\cdot\dfrac{\dfrac{\sin{x}\cdot(-\sin{x})}
+{2\cdot\sqrt{\cos{x}}}-{(\cos{x})}^{\frac{3}{2}}}{\cos{x}}=
+\dfrac{\sin^{2}{x}-2}{4\cdot\cos^{\frac{3}{2}}{x}}$
+
+\subsection{Lichoběžníkové pravidlo}
+
+\par Lichoběžníkové pravidlo nahrazuje na~každém podintervalu $\langle x_{i-1}, x\rangle$
+integrand $f(x)$ Lagrangerovým polynomem tak, jak bylo popsáno v~příkladě
+\ref{sec:lagrange}. Při~$h=x_i-x_{x-1}$ pak pro~každý subinterval platí
+
+\begin{equation}
+\int_{x_{i-1}}^{x_i}f(x)\d{x}\,\approx\,\int_{x_{i-1}}^{x_i}L_{i,1}(x)\d{x},
+\end{equation}
+
+po~patřičné úpravě
+
+\begin{equation}
+\int_{x_{i-1}}^{x_i}f(x)\d{x}\,\approx\,\dfrac{h}{2}\left( f(x_{i-1})+f(x)\right).
+\end{equation}
+
+Pro~celý interval $\langle a, b \rangle$ lze aproximaci vyjádřit ve~tvaru
+
+\begin{equation}
+\int_{a}^{b}f(x)\d{x}\,=\,\sum_{i=1}^{n}\int_{x_{i-1}}^{x_i}f(x)\d{x}
+\,\approx\,\sum_{i=1}^{n}\int_{x_{i-1}}^{x_i}L_{i,1}(x)\d{x},
+\end{equation}
+
+\begin{equation}
+\label{eq:integral}
+\int_{a}^{b}f(x)\d{x}\,\approx\,\dfrac{h}{2}\left[
+f(a)+2\cdot\sum_{i=2}^{n-1}f(x_i)+f(b)
+\right]
+\end{equation}
+
+%% chyba lichoběžníkového pravidla
+
+\par Obecná chyba takto získané aproximace je rovna
+
+\begin{equation}
+R_{i,1}(f)=\dfrac{f''(\eta)}{2} \int_{x_{i-1}}^{x_i}(x-x_{i-1})(x-x_i)\d{x}
+\end{equation}
+
+pro~určitá $\eta_i\in\langle x_{x-1}, x_i \rangle$. Pro~celkový odhad chyby lze použít
+vztah
+
+\begin{equation}
+\label{eq:err}
+|\bar{R}_1(f)|\leq{n}\dfrac{h^3}{12}\bar{M}_2\,=\,\dfrac{\bar{M}_2}{12n^2}(b-a)^3.
+\end{equation}
+
+\newpage
+\subsubsection{Aproximace určitého integrálu lichoběžníkovou metodou}
+\par Pro~provedení výpočtu je třeba sestavit tabulku uzlů a~funkčních hodnot v~těchto
+uzlech. Uvažujeme-li lichoběžníkovou metodu jako ekvidistantní kvadraturní formuli, potom
+konstantní krok $h=\dfrac{b-a}{n}$ bude při~$n=10$ na~intervalu $\langle 0, 1 \rangle$
+$h=\dfrac{1-0}{10}=0,1$.
+
+\begin{center}
+	\def\arraystretch{1.5}
+	\begin{tabular}{|c||c|c|c|c|}
+		\hline
+			$i$ & $x_i$ & $f(x)=\sqrt{\cos{x}}$ & $f(x_i)$ & $f''(x_i)$ \\
+			\hline\hline
+			$0$ & $0$ & $\sqrt{\cos{0}}$ & $1$ & $-0,5$ \\
+			\hline
+			$1$ & $0,1$ & $\sqrt{\cos{0,1}}$ & $0,997499$ & $-0,5012599$ \\
+			\hline
+			$2$ & $0,2$ & $\sqrt{\cos{0,2}}$ & $0,9899831$ & $-0,5051615$ \\
+			\hline
+			$3$ & $0,3$ & $\sqrt{\cos{0,3}}$ & $0,9774132$ & $-0,5120885$ \\
+			\hline
+			$4$ & $0,4$ & $\sqrt{\cos{0,4}}$ & $0,9597192$ & $-0,5227481$ \\
+			\hline
+			$5$ & $0,5$ & $\sqrt{\cos{0,5}}$ & $0,9367938$ & $-0,5382926$ \\
+			\hline
+			$6$ & $0,6$ & $\sqrt{\cos{0,6}}$ & $0,9084798$ & $-0,5605419$ \\
+			\hline
+			$7$ & $0,7$ & $\sqrt{\cos{0,7}}$ & $0,8745526$ & $-0,592389$ \\
+			\hline
+			$8$ & $0,8$ & $\sqrt{\cos{0,8}}$ & $0,8346896$ & $-0,63857$ \\
+			\hline
+			$9$ & $0,9$ & $\sqrt{\cos{0,9}}$ & $0,7884225$ & $-0,7072147$ \\
+			\hline
+			$10$ & $1$ & $\sqrt{\cos{1}}$ & $0,7350526$ & $-0,8132473^{*}$ \\
+			
+		\hline
+	\end{tabular}
+\end{center}
+
+\par Získané výsledky je možné dosadit do~vztahu (\ref{eq:integral}):
+
+\[
+\int_{0}^{1}\sqrt{\cos{x}}\d{x}\,\approx\,\dfrac{0,1}{2}\left[
+f(0)+2\cdot\sum_{i=2}^{9}f(x_i)+f(10)
+\right]
+\]
+
+\[
+=0,05\cdot\left[
+1+
+2\cdot(
+0,997499+0,9899831+\dots+0,8346896+0,7884225
+)
++0,7350526
+\right]=\doubleunderline{0,9135079 \pm R_1(f)}
+\]
+
+\par Ověření v~prostředí \texttt{R}:
+
+\begin{verbatim}
+> x <- seq(0, 1, 0.1)
+> fx <- sqrt(cos(x))
+> 0.1/2*(fx[1]+2*sum(fx[c(2:10)])+fx[11])
+[1] 0.9135079
+\end{verbatim}
+
+\subsubsection{Odhah chyby u~lichoběžníkové metody}
+\par Odhad chyby dosazením do~vztahu (\ref{eq:err}):
+
+\[
+R_1(f)\,=\,\dfrac{\max(|f''(x_i)|)}{12\cdot10^2}(1-0)^3\,=\,\dfrac{0,8132473}{120}\,
+=\,\doubleunderline{\pm0,006777061}
+\]
+
+\par Ověření v~prostředí \texttt{R}:
+
+\begin{verbatim}
+> M2 <- max(abs(((sin(x))^2-2)/(4*(cos(x))^(3/2))))
+> R1 <- (M2/(12*10^2))*(1-0)^3
+> R1
+[1] 0.0006777061
+\end{verbatim}
+
+\newpage
+\subsection{Simpsonovo pravidlo}
+
+\par Simpsonova metoda pracuje s~parabolami, spočívá tedy v~nahrazení integrandu $f(x)$
+v~každém svém subintervalu polynomem druhého stupně. K~sestavení každého takového polynomu
+je třeba znát právě tři body. Jako třetí bod je obyčejně použit střed každého
+subintervalu.
+
+\begin{equation}
+\int_{i}^{j}f(x)\d{x}\,\approx\,\int_{i}^{j}L_2(x)\d{x}
+\end{equation}
+
+\par Při~označení $i=s_0$, $\dfrac{j-i}{2}=s_1$, $j=s_2$ lze získat tvar
+
+\begin{equation}
+\int_{i}^{j}L_2(x)\d{x}\,=\,
+\int_{i}^{j}\left[
+f(s_0)\dfrac{(x-s_1)(x-s_2)}{(s_0-s_1)(s_0-s_2)}+
+f(s_1)\dfrac{(x-s_0)(x-s_2)}{(s_1-s_0)(s_1-s_2)}+
+f(s_2)\dfrac{(x-s_0)(x-s_1)}{(s_2-s_0)(s_2-s_1)}
+\right]\d{x}
+\end{equation}
+
+\par A~po~odpovídajících úpravách při~$h=s_1-s_0$
+
+\begin{equation}
+\int_{i}^{j}f(x)\d{x}\,\approx\,
+\dfrac{h}{3}\left[
+f(s_0)+4\cdot{f}(s_1)+f(s_2)
+\right]
+\end{equation}
+
+\par Z~uvedeného vztahu vyplývá, že interval $\langle a, b \rangle$ složeného pravidla
+musí být rozdělen na~$2n$ stejných částí s~podintervaly definovanými jako $\langle
+x_{2i-2}, x_{2i} \rangle$ se~středem $s_i=x_{2i-1}$ pro~$i=1,\dots,n$, přičemž
+$h=\dfrac{b-a}{2n}$.
+
+\begin{equation}
+\int_{a}^{b}f(x)\d{x}\,\approx\,
+\sum_{i=1}^{n}\int_{x_{2i-2}}^{x_{2i}}L_{i,2}(x)\d{x}\,=\,
+\dfrac{h}{3}\left[
+\sum_{i=1}^{n}\left(
+f(x_{2i-2})+4f(x_{2i-1})+f(x_{2i})
+\right)
+\right]
+\end{equation}
+
+\begin{equation}
+\label{eq:simpson}
+\int_{a}^{b}f(x)\d{x}\,\approx\,
+\dfrac{h}{3}\left[
+f(x_0)+2\sum_{i=1}^{n-1}f(x_{2i})+
+4\sum_{i=1}^{n}f(x_{2i-1})+
+f(x_{2n})
+\right]
+\end{equation}
+
+\subsubsection{Aproximace určitého integrálu Simpsonovým pravidlem}
+
+\par Určení kroku $h=\dfrac{b-a}{2n}$ pro~$n=10$: $h=\dfrac{1-0}{2\cdot{10}}=0,05$.
+
+\begin{center}
+	\def\arraystretch{1.5}
+	\begin{tabular}{|c|c||c|c|}
+		\hline
+			$x_{2i}$ & $f(x_{2i})=\sqrt{\cos{x_{2i}}}$ & $x_{2i-1}$ & $f(x_{2i-1})=\sqrt{\cos{x_{2i-1}}}$ \\
+			\hline
+			\hline
+			$x_0=0$ & $1$ & $x_1=0,05$ & $0,9993749$ \\
+			\hline
+			$x_2=0,1$ & $0,9974990$ & $x_3=0,15$ & $0,9943697$ \\
+			\hline
+			$x_4=0,2$ & $0,9899831$ & $x_5=0,25$ & $0,9843335$ \\
+			\hline
+			$x_6=0,3$ & $0.9774132$ & $x_7=0,35$ & $0,9692124$ \\
+			\hline
+			$x_8=0,4$ & $0,9597192$ & $x_9=0,45$ & $0,9489189$ \\
+			\hline
+			$x_{10}=0,5$ & $0,9367938$ & $x_{11}=0,55$ & $0,9233225$ \\
+			\hline
+			$x_{12}=0,6$ & $0,9084798$ & $x_{13}=0,65$ & $0,8922353$ \\
+			\hline
+			$x_{14}=0,7$ & $0,8745526$ & $x_{15}=0,75$ & $0,8553881$ \\
+			\hline
+			$x_{16}=0,8$ & $0,8346896$ & $x_{17}=0,85$ & $0,8123935$ \\
+			\hline
+			$x_{18}=0,9$ & $0,7884225$ & $x_{19}=0,95$ & $0,7626815$ \\
+			\hline
+			$x_{20}=1$ & $0,7350526$ & ~ & ~ \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\newpage
+
+\par Po~dosazení hodnot do~vztahu (\ref{eq:simpson}):
+
+\[
+\int_{0}^{1}f(x)\d{x}\,\approx\,
+\dfrac{0,05}{3}\left[
+1+2\sum_{i=1}^{9}f(x_{2i})+
+4\sum_{i=1}^{10}f(x_{2i-1})+
+0,7350526
+\right]
+\]
+
+\[
+\int_{0}^{1}f(x)\d{x}\,\approx\,
+\dfrac{0,05}{3}\left[
+1+2\cdot{8,267553}+
+4\cdot{9,14223}+
+0,7350526
+\right]=\doubleunderline{0,9139847}
+\]\\
+
+
+\par Ověření v~prostředí \texttt{R}:
+
+\begin{verbatim}
+> x <- seq(0, 1, 0.05)
+> fx <- sqrt(cos(x))
+> (0.05/3)*(fx[1]+2*sum(fx[seq(3,19,2)])+4*sum(fx[seq(2,20,2)])+fx[21])
+[1] 0.9139847
+\end{verbatim}
+
+%----------------------------------------------------------------------------------------
+\newpage
+\section{Metodou nejmenších čtverců hledejte aproximační polynomy pro~určené stupně.}
+
+\par Zvoleno zadání a) $n=2$
+
+\begin{center}
+	\begin{tabular}{|c|c|c|c|c|c|}
+		\hline
+		$x$ & 1 & 1,5 & 2 & 2,5 & 3 \\
+		\hline
+		$f(x)$ & 0,837 & 0,192 & -0,950 & -1,095 & 1,344 \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\par ~\\
+
+%%%% Výpočet
+\par Hledaný polynom bude ve~tvaru $P_2(x)=a_0+a_1x+a_2x^2$ a~odpovídajcí systém
+normálních rovnic v~zápisu skalárního součinu
+
+\begin{equation}
+\arraycolsep=1.4pt\def\arraystretch{1.8}
+\begin{array}{lclclcl}
+\label{eq:norm}
+(y,1) & = & a_0(1,1) & + & a_1(x,1) & + & a_2(x^2,1) \\
+(y,x) & = & a_0(1,x) & + & a_1(x,x) & + & a_2(x^2,x) \\
+(y,x^2) & = & a_0(1,x^2) & + & a_1(x,x^2) & + & a_2(x^2,x^2) \\
+\end{array}
+\end{equation}
+
+bude nabývat hodnot z~tabulky:
+
+\[\arraycolsep=1.4pt\def\arraystretch{1.8}
+\begin{array}{lclcl}
+(y,1) & = & 0,837 + 0,192 - 0,950 - 1,095 + 1,344 & = & 0,328 \\
+(y,x) & = & 0,837 +  0,288 - 1,9 - 2,7375 + 4,032 & = & 0,5195 \\
+(y,x^2) & = & 0,837 + 0,432 - 3,8 - 6,84375 + 12,096 & = & 2,72125 \\
+(1,1) & = & 1 + 1 + 1 + 1 + 1 & = & 5 \\
+(x,1) & = & (1,x) = 1 + 1,5 + 2 + 2,5 + 3 & = & 10 \\
+(x^2,1) & = & (1,x^2) = (x,x) = 1 + 2,25 + 4 + 6,25 + 9 & = & 22,5 \\
+(x,x^2) & = & (x^2,x) = 1 + 3,375 + 8 + 15,625 + 27 & = & 55 \\
+(x^2,x^2) & = & 1 + 5,0625 + 16 + 39,0625 + 81 & = & 142,125 \\
+\end{array}
+\]
+
+\par Výsledná soustava normálních rovnic tedy bude mít po~dosazení do~(\ref{eq:norm})
+následující podobu:
+
+\begin{equation}
+\label{eq:lin}
+\arraycolsep=1.4pt\def\arraystretch{1.8}
+\begin{array}{lclclcl}
+0,328 & = & a_0\cdot5 & + & a_1\cdot10 & + & a_2\cdot22,5 \\
+0,5195 & = & a_0\cdot10 & + & a_1\cdot22,5 & + & a_2\cdot55 \\
+2,72125 & = & a_0\cdot22,5 & + & a_1\cdot55 & + & a_2\cdot142,125 \\
+\end{array}
+\end{equation}
+
+\newpage
+\par Soustavu lienárních algebraických rovnic (\ref{eq:lin}) lze vyřešit například užitím
+Cramerova pravidla. Uvažujme následující funkci v~prostředí \texttt{MATLAB}, která
+realizuje výpočet neznámých podle Cramerova pravidla a~pracuje s~předanou maticí $A$
+a~sloupcovým vektorem pravých stran $b$.
+
+\begin{verbatim}
+function x = cramerSolve(A, b)
+[m n] = size(b);
+v = zeros(m,1);
+Ai = A;
+
+for k=1:m
+    Ai(:,k) = b;
+    v(k) = det(Ai);
+    Ai(:,k) = A(:,k);
+end
+
+detA = det(A);
+x = v / detA;
+\end{verbatim}
+
+\par ~\\
+
+\par A~její následné zavolání s~odpovídajícími argumenty:\\
+
+\begin{verbatim}
+>> A = [ 5 10 22.5; 10 22.5 55; 22.5 55 142.125 ]
+>> b = [ 0.328 0.5195 2.72125 ]'
+>> a = cramerSolve(A, b)
+a =
+
+    7.3398
+   -8.2432
+    2.0471
+\end{verbatim}
+
+\par Hledaný polynom je tedy \doubleunderline{$P_2=7,3398 -8,2432x + 2,0471x^2$}. \\
+
+\par ~ \\
+\par Ověření funkcí \texttt{polynomFit2.m}
+z~\path{N:\UKAZKY\Prazak\NUMA\B_cviceni\cv06\matlab}:
+
+\begin{verbatim}
+>> x = [ 1 1.5 2 2.5 3 ];
+>> y = [ 0.837 0.192 -0.95 -1.095 1.344 ];
+>> ap = PolynomFit2(x, y, 2)
+ap =
+
+    7.3398
+   -8.2432
+    2.0471
+\end{verbatim}
+
+%----------------------------------------------------------------------------------------
+% KONEC
+%----------------------------------------------------------------------------------------
+
+\end{document}

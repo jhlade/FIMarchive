@@ -1,0 +1,220 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,10pt]{article} 
+
+\usepackage[czech]{babel} % čeština
+\usepackage{tabularx}
+
+\usepackage{fontspec} % fonty
+\defaultfontfeatures{Mapping=tex-text}
+\setmainfont{Calibri-Light} % Main document font
+%%\setmainfont{Lucida Grande}
+
+\usepackage{xunicode,xltxtra,url,parskip} % Formatting packages
+
+\usepackage[usenames,dvipsnames]{xcolor} % Required for specifying custom colors
+
+\usepackage[big]{layaureo} % Margin formatting of the A4 page, an alternative to layaureo
+                           % can be \usepackage{fullpage} To reduce the height of the top
+                           % margin uncomment: \addtolength{\voffset}{-1.3cm}
+
+\usepackage{hyperref} % Required for adding links	and customizing them
+\definecolor{linkcolour}{rgb}{0,0.2,0.3} % Link color
+\hypersetup{colorlinks,breaklinks,urlcolor=linkcolour,linkcolor=linkcolour} % Set link colors throughout the document
+
+\usepackage{titlesec} % Used to customize the \section command
+\titleformat{\section}{\Large\scshape\raggedright}{}{0em}{}[\titlerule] % Text formatting of sections
+\titlespacing{\section}{0pt}{3pt}{3pt} % Spacing around sections
+
+%----------------------------------------------------------------------------------------
+%	PDF settings
+%----------------------------------------------------------------------------------------
+
+\author{Bc. Jan Hladěna}
+\hypersetup
+{
+    pdfauthor={Bc. Jan Hladěna},
+    pdfsubject={KF DORDB - Semestrální projekt},
+    pdftitle={DORDB Semestrální projekt}
+}
+
+\begin{document}
+\pagestyle{empty} % Removes page numbering
+
+%\font\fb=''[cmr10]'' % Change the font of the \LaTeX command under the skills section
+
+%----------------------------------------------------------------------------------------
+%	HEADER
+%----------------------------------------------------------------------------------------
+
+\begin{minipage}[t]{0.6\textwidth}
+\par{ {{K-AI2-1 DORDB Semestrální projekt}}}
+\end{minipage}
+\begin{minipage}[t]{0.4\textwidth}
+  \begin{flushright}
+  	\par{ {\textsc{Jan Hladěna \\ \texttt{hladeja1} - \texttt{I1500705} }}}
+  \end{flushright}
+\end{minipage}
+
+\begin{center}
+	\noindent\rule{\textwidth}{0.3pt}
+\end{center}
+
+%----------------------------------------------------------------------------------------
+%       TEXT
+%----------------------------------------------------------------------------------------
+
+\par Tato práce vychází ze~zadání semestrálního projektu zpracovávaného v~předchozím
+bakalářském studiu pro~předmět DBS. Jednalo se o~školní zadání na~téma \emph{Řetězec
+kaváren}, původní scénář je zde přiložen. Tento projekt byl úspěšně obhájen v~LS
+2013/2014. \\
+
+\bigskip
+
+\par Přiložené soubory \\
+Původní scénář projektu - \texttt{modely/DBS-scenar\_retezec-kavaren.pdf} \\
+ER diagram - \texttt{modely/ERD-hladena\_kavarny.pdf} \\
+DDL diagram - \texttt{modely/DDL-hladena\_kavarny.pdf} \\
+
+\par Skript vytvářející základní schéma databáze - \texttt{sql-skripty/01-DDL.sql}.
+Oproti původnímu zadání je úvazek v~tabulce \texttt{PracovniPomer} realizován absolutním
+číslem udávajícím počet hodin týdně, nikoliv relativním poměrem vyjádřeným procenty.
+
+\par Skript naplňující databázi testovacími daty - \texttt{sql-skripty/03a-populate.sql}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Popis integritních omezení}
+
+\subsection*{Triviální integritní omezení}
+
+\par Skript vytvářející triviální integritní
+omezení - \texttt{sql-skripty/02-Trivialni-IO.sql}.
+
+\par Skript porušující integritní omezení - \texttt{sql-skripty/07-Poruseni-IO.sql}.
+\par Výstup pro skript porušující integritní
+omezení - \texttt{sql-vystupy/07-Poruseni-IO.txt}.
+
+\bigskip
+
+\par Organizační jednotka - tabulka \texttt{OrgJednotka}
+
+\begin{itemize}
+	\item{ID organizační jednotky musí být v~celém systému jedinečné}
+	\item{ID organizační jednotky musí být čtyřmístné kladné číslo}
+\end{itemize}
+
+\par Pracovní poměr - tabulka \texttt{PracovniPomer} 
+
+\begin{itemize}
+	\item{Každý úvazek musí být kladný a~nesmí překročit 40~hodin}
+	\item{Každý pracovní poměr nesmí končit dříve, než začne}
+\end{itemize}
+
+\par Produkt - tabulka \texttt{Produkt} 
+
+\begin{itemize}
+	\item{Cena produktu musí být kladným číslem}
+\end{itemize}
+
+
+\subsection*{Dodatečná integritní omezení}
+
+\par Skript vytvářející dodatečná integritní
+omezení - \texttt{sql-skripty/03-Dodatecna-IO.sql}.
+
+\bigskip
+
+%%\par Pracovní poměr - tabulka \texttt{PracovniPomer} 
+
+\begin{itemize}
+	\item{Organizační jednotka je v~každé zemi jen jedna}
+	\item{Všechny obchody spadají pod~hlavní organizační jednotku příslušnou dané zemi,
+	kde se obchod nachází}
+	\item{Celkový úvazek každého zaměstnance v~každém z~překrývajících se období nesmí
+	překročit 40~hodin týdně}
+	\item{Pracovník, který je manažerem některé z~organizačních jednotek, nesmí mít
+	v~aktuálním období celkový úvazek na~jiných pracovních pozicích vyšší než 20~hodin
+	týdně}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Návrh API \uv{business logiky}}
+
+\begin{enumerate}
+\item{\emph{Změna oddělení zaměstnance ze~starého na~nové.} Procedura na~základě předaných
+argumentů ukončí pracovní poměr ve~starém oddělení a~přesune celý úvazek daného
+zaměstnance do~nového oddělení. \\
+\emph{zmena\_odd(id zaměstnance, id starého oddělení, id nového oddělení);}\\
+%%\verb|zmena_odd(zam IN NUMBER, old_odd IN NUMBER, new_odd IN NUMBER);|
+}
+
+\item{\emph{Povýšení zaměstnance na~manažera některé organizační jednotky.} Procedura
+na~základě předaných argumentů zjistí celkový současný úvazek daného zaměstnance, který,
+překračuje-li 20~hodin, bude poměrově přerozdělen do~stávajících pracovních poměrů tak,
+aby nebylo celkově překročeno 20~hodin. Přerozdělení bude realizováno ukončením
+stávajících pracovních poměrů a~vytvořením nových. Zaměstnanec bude následeně jmenován
+manažerem dané organizační jednotky. \\
+\emph{novy\_manager(id zaměstnance, id organizační jednotky);}\\
+}
+
+\end{enumerate}
+
+\par Skript vytvářející balíček a~business logiku - \texttt{sql-skripty/04-API-package.sql}.
+\par Skript ověřující business logiku - \texttt{sql-skripty/05-API-verify.sql}.
+\par Výstup ověření business logiky - \texttt{sql-vystupy/05-API-verify.txt}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Definované dotazy nad~schématem}
+
+\begin{enumerate}
+	\item{Nejstarší zaměstnanci - vypsání seznamu tří nejstarších zaměstnanců firmy včetně
+	data jejich nástupu a~oddělení.}
+	\item{Letištní sortiment - výpis produktů, které jsou k~dostání na~letištích.}
+	\item{Čajovny - seznam adres všech čajoven na~světě.}
+	\item{Bývalí zaměstnanci - seznam adres bývalých zaměstnanců.}
+	\item{Management OU - seznam manažerů všech organizačních jednotek.}
+\end{enumerate}
+
+\par Skript vytvářející definované dotazy - \texttt{sql-skripty/06-Dotazy.sql}.
+\par Výstupy dotazů - \texttt{sql-vystupy/06-Dotazy.txt}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Odvozené hodnoty}
+
+\par Tabulka \texttt{Zamestnanec} bude doplněna o~sloupec \texttt{celk\_uvazek},
+obsahující informaci o~celkovém aktuálním úvazku daného zaměstnance. \\ 
+
+\par Skript doplňující sloupec s~odvozenou hodnotou - \texttt{sql-skripty/08-Odvozene.sql}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Schéma v~objektové podobě}
+
+\par Skript vytvářející schéma v~objektové
+podobě a~importující neobjektová data - \texttt{sql-skripty/09-Objektove-schema.sql}.
+
+\par Skript provádějící dotazy nad~objektovým
+schématem - \texttt{sql-skripty/10-Objektove-dotazy.sql}.
+
+\par Výstup dotazů provedených nad~objektovým
+schématem - \texttt{sql-vystupy/10-Objektove-dotazy.txt}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Slovní návrh faktů a~dimenzí pro~datový sklad}
+
+\par Tabulka faktů - \emph{pracovní poměr}, dimenze \emph{zaměstnanec}, \emph{oddělení},
+\emph{datum}, \emph{úvazek}. Možnosti analýzy přestupů zaměstnanců mezi odděleními,
+na které, oddělení v~jaké době pracovalo nejvíce zaměstnanců, kdo měl po~jakou dobu jak
+velký úvazek.\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\end{document}

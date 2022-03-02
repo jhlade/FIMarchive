@@ -1,2 +1,1 @@
-# FIMarchive
- Archiv - některé projekty z FIM UHK / hladeja1.
+Archiv - některé projekty z FIM UHK / hladeja1.

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+	<xs:element name="archive">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="dlm"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="dlm">
+		<xs:complexType>
+      		<xs:sequence>
+      			<xs:element ref="identifier"/>
+      			<xs:element ref="name"/>
+      			<xs:element ref="annotation"/>
+      			<xs:element ref="subject"/>
+      			<xs:element ref="grade"/>
+      			<xs:element ref="author"/>
+      			<xs:element ref="date"/>
+      			<xs:element ref="url"/>
+      		</xs:sequence>
+      	</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="identifier" type="xs:string" />
+	<xs:element name="name" type="xs:string" />
+	<xs:element name="annotation" type="xs:string" />
+	
+	<xs:element name="subject">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[A-Z]{4}"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	
+	<xs:element name="grade">
+		<xs:simpleType>
+			<xs:restriction base="xs:integer">
+				<xs:pattern value="[1-9]"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+	
+	<xs:element name="author" type="xs:string" />
+	<xs:element name="date" type="xs:date" />
+	
+	<xs:element name="url">
+		<xsd:simpleType name="ProdNumType">
+  			<xsd:restriction base="xsd:string">
+    			<xsd:pattern value="(https?)://(.*)"/>
+  			</xsd:restriction>
+		</xsd:simpleType>
+	</xs:element>
+
+</xs:schema>
+
+

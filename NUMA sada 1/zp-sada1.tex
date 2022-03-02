@@ -1,0 +1,982 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,10pt]{article} 
+
+\usepackage[czech]{babel} % čeština
+\usepackage{tabularx}
+\usepackage{footnote}
+
+\usepackage{amsmath}
+\usepackage{mathtools}
+%%\usepackage{matrix}
+
+\usepackage{fontspec} % fonty
+\defaultfontfeatures{Mapping=tex-text}
+%\setmainfont{Calibri-Light} % Main document font
+%\setmainfont{Lucida Grande}
+
+\usepackage{xunicode,xltxtra,url,parskip} % Formatting packages
+
+\usepackage{fancyhdr}
+
+%\usepackage[usenames,dvipsnames]{xcolor} % Required for specifying custom colors
+
+\usepackage[big]{layaureo} % Margin formatting of the A4 page, an alternative to layaureo
+                           % can be \usepackage{fullpage} To reduce the height of the top
+                           % margin uncomment:
+                           % \addtolength{\voffset}{-1.3cm}
+\geometry{left=15mm,right=15mm}
+
+\usepackage{hyperref} % Required for adding links	and customizing them
+%\definecolor{linkcolour}{rgb}{0,0.5,0.3} % Link color
+%\hypersetup{colorlinks,breaklinks,urlcolor=linkcolour,linkcolor=linkcolour} % Set link colors throughout the document
+
+\usepackage{titlesec} % Used to customize the \section command
+\titleformat{\section}{\bf\raggedright}{\thesection.~}{0em}{}
+\titlespacing{\section}{0pt}{3pt}{3pt} % Spacing around sections
+\titleformat{\subsection}{\bf\raggedright}{\thesubsection~}{0em}{}
+
+% PDF settings
+\author{Bc. Jan Hladěna}
+\hypersetup
+{
+    pdfauthor={Bc. Jan Hladěna},
+    pdfsubject={KNUMA - Zápočtový úkol, sada 1}, 
+    pdftitle={KNUMA - Zápočtový úkol, sada 1}
+}
+
+\lhead{\textsc{K-AI2-1 KNUMA - Zápočtový úkol, sada 1 - LS 2015/16}}
+\rhead{\href{mailto:jan.hladena@uhk.cz}{\textsc{Jan Hladěna}, I1500705}}
+\cfoot{}
+\renewcommand{\headrulewidth}{0.4pt}
+%\renewcommand{\footrulewidth}{0.4pt}
+
+\def\doubleunderline#1{\underline{\underline{#1}}}
+
+\begin{document}
+\pagestyle{fancy}
+
+%\font\fb=''[cmr10]'' % Change the font of the \LaTeX command under the skills section
+
+%----------------------------------------------------------------------------------------
+% ZÁPOČET
+%----------------------------------------------------------------------------------------
+
+\section{Úlohy na~absolutní a~relativní chybu výpočtu}
+
+\par c) Určete výkon $P~=~U{\cdot}I$ a~elektrický odpor
+$R~=~\frac{U}{I}$ topné spirály, jestliže bylo naměřeno napětí $U~=~(230~{\pm}~5)~V$
+a~elektrický proud $I~=~(5~{\pm}~0,4)~A$. V~obou případech určete také relativní chybu.
+
+\par {~}
+
+%%%% Výpočet
+
+\par Výkon P [W]
+
+\begin{minipage}[t]{.6\textwidth}
+
+$
+\begin{array}{lcl}
+P & = & U{\cdot}I~+~\epsilon{(P)}~=~U{\cdot}I~\pm~(|U|{\cdot}{\epsilon}(I)~+~|I|{\cdot}{\epsilon}(U)) \\
+\\
+P & = & 230~\cdot~5~\pm~(|230|{\cdot}0,4~+~|5|{\cdot}5) \\
+  & = & 1150~\pm~(92~+~25) \\
+  & = & \doubleunderline{1150~\pm~117~W}
+\end{array}
+$
+
+\par {~}
+\par {~}
+
+
+\end{minipage}%
+\begin{minipage}[t]{.4\textwidth}
+
+$
+\begin{array}{lcl}
+\epsilon(U) & = & 5~V \\
+\epsilon(I) & = & 0,4~A 
+\end{array}
+$
+
+\par {~}
+
+$
+\begin{array}{lcl}
+\delta{U} & = & \frac{5}{230}~\cdot~100~=~2,17~\% \\
+\delta{I} & = & \frac{0,4}{5}~\cdot~100~=~8~\% 
+\end{array}
+$
+
+\par {~}
+
+\end{minipage}
+
+\bigskip
+\par{~}
+\bigskip
+
+\par Relativní chyba výkonu P
+
+%% delta P
+\begin{minipage}[t]{.6\textwidth}
+
+$
+\begin{array}{lcl}
+\delta{P} & = & \frac{\epsilon{(P)}}{P}~\cdot~100 \\
+\\
+          & = & \frac{117}{1150}~\cdot~100 \\
+\\
+          & = & \doubleunderline{10,17~\%}
+\end{array}
+$
+
+\end{minipage}%
+\begin{minipage}[t]{.4\textwidth}
+
+$
+\begin{array}{lcl}
+\delta{P} & = & \delta{U}~+~\delta{I} \\
+\\
+          & = & 2,17 + 8 \\
+\\
+          & = & \doubleunderline{10,17~\%}
+\end{array}
+$
+
+\end{minipage}
+
+\bigskip
+\par{~}
+\bigskip
+
+\par Elektrický odpor R [$\Omega$]
+%%% odpor
+
+$
+\begin{array}{lcl}
+R & = & \frac{U}{I}~+~\epsilon{(R)} = \frac{U}{I}~\pm~(\frac{\epsilon{(U)}}{|I|}~+~\frac{|U|}{I^{2}}{\cdot}\epsilon{(I)}) \\
+\\
+  & = & \frac{U}{I}~\pm~\frac{|I|{\cdot}\epsilon{(U)}~+~|U|{\cdot}\epsilon{(I)}}{I^{2}} \\
+\\
+R & = & \frac{230}{5}~\pm~\frac{|5|{\cdot}{5}~+~|230|{\cdot}{0,4}}{5^{2}} \\
+\\
+  & = & 46~\pm~\frac{25~+~92}{25}~=46~\pm~\frac{117}{25} \\
+\\
+  & = & \doubleunderline{46~\pm~4,68~\Omega}
+\end{array}
+$
+
+\bigskip
+\par{~}
+\bigskip
+
+\par Relativní chyba odporu R
+
+\begin{minipage}[t]{.6\textwidth}
+
+$
+\begin{array}{lcl}
+\delta{R} & = & \frac{\epsilon{(R)}}{R}~\cdot~100 \\
+\\
+          & = & \frac{4,68}{46}~\cdot~100 \\
+\\
+          & = & \doubleunderline{10,17~\%}
+\end{array}
+$
+
+\end{minipage}%
+\begin{minipage}[t]{.4\textwidth}
+
+$
+\begin{array}{lcl}
+\delta{R} & = & \delta{U}~+~\delta{I} \\
+\\
+          & = & 2,17 + 8 \\
+\\
+          & = & \doubleunderline{10,17~\%}
+\end{array}
+$
+
+\end{minipage}
+
+\newpage
+\section{Pomocí Gaussovy eliminační metody a~Gaussovy eliminační metody s~částečnou pivotací
+řešte soustavy lineárních algebraických rovnic}
+
+$
+a)~
+\left( \begin{array}{rrrr|r}
+1 & -1 & -1 &  2 &   6 \\
+0 &  4 &  4 & -1 & -13 \\
+2 &  2 &  1 & -3 &  -6 \\
+1 &  0 & -2 &  1 &   4 
+\end{array} \right)
+$
+
+\par {~}
+
+%%%% Výpočet
+
+\par Jsou použity funkce z~\path{N:\UKAZKY\Prazak\NUMA\B_cviceni\cv02\matlab}. \\
+
+
+%% Zadání A %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\par Zadání matice A:
+
+\begin{verbatim}
+>> A = [[1, -1, -1, 2, 6]; [0, 4, 4, -1, -13]; [2, 2, 1, -3, -6]; [1, 0, -2, 1, 4]]
+\end{verbatim}
+
+
+%% Výpis - zadání A %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+A =
+
+     1    -1    -1     2     6
+     0     4     4    -1   -13
+     2     2     1    -3    -6
+     1     0    -2     1     4
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+A~=~
+\left( \begin{array}{rrrr|r}
+1 & -1 & -1 &  2 &   6 \\
+0 &  4 &  4 & -1 & -13 \\
+2 &  2 &  1 & -3 &  -6 \\
+1 &  0 & -2 &  1 &   4 
+\end{array} \right)
+$
+
+\vfill
+
+\end{minipage}
+
+%% Čtvercová matice A %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\par Čtvercová matice U:
+
+\begin{verbatim}
+>> U = A(1:4, 1:4)
+\end{verbatim}
+
+%% Výpis - čtvercová matice U %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+U =
+
+     1    -1    -1     2
+     0     4     4    -1
+     2     2     1    -3
+     1     0    -2     1 
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+U~=~
+\left( \begin{array}{rrrr}
+1 & -1 & -1 &  2 \\
+0 &  4 &  4 & -1 \\
+2 &  2 &  1 & -3 \\
+1 &  0 & -2 &  1 
+\end{array} \right)
+$
+
+\vfill
+\end{minipage}
+
+%% Vektor pravých stran %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\par Vektor pravých stran:
+
+\begin{verbatim}
+>> y = A(1:4, 5)
+\end{verbatim}
+
+%% Výpis - vektor pravých stran %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+y =
+
+       6
+     -13
+      -6
+       4
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+y~=~
+\left( \begin{array}{r}
+  6 \\
+-13 \\
+ -6 \\
+  4 
+\end{array} \right)
+$
+
+\vfill
+\end{minipage}
+
+%% Eliminiace GEM %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\subsection{Eliminace GEM}
+
+%% U1
+\begin{verbatim}
+>> [U1, y1] = eliminace1(U, y)
+\end{verbatim}
+
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+U1 =
+
+    1.0000   -1.0000   -1.0000    2.0000
+         0    4.0000    4.0000   -1.0000
+         0         0   -1.0000   -6.0000
+         0         0         0   11.2500
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+U_1~=~
+\left( \begin{array}{rrrr}
+1 & -1 & -1 &  2 \\
+0 &  4 &  4 & -1 \\
+0 &  0 & -1 & -6 \\
+0 &  0 &  0 & 11,25 
+\end{array} \right)
+$
+\vfill
+\end{minipage}
+
+%% y1
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+y1 =
+
+    6.0000
+  -13.0000
+   -5.0000
+   11.2500
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+y_1~=~
+\left( \begin{array}{r}
+  6 \\
+-13 \\
+ -5 \\
+ 11,25
+\end{array} \right)
+$
+\vfill
+\end{minipage}
+
+%% Zpětné %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\par Zpětné dosazení:
+
+\begin{verbatim}
+>> [x1] = back(U1, y1)
+\end{verbatim}
+
+%% x1
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+x1 =
+
+     1
+    -2
+    -1
+     1
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+\overline{x_1}~=~
+\left( \begin{array}{r}
+  1 \\
+ -2 \\
+ -1 \\
+  1
+\end{array} \right)
+$
+\vfill
+\end{minipage}
+
+
+%% Eliminiace GEM s pivotací %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Eliminace GEM s~částečnou pivotací}
+
+%% U2
+\begin{verbatim}
+>> [U2, y2] = eliminace2(U, y)
+\end{verbatim}
+
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+U2 =
+
+    2.0000    2.0000    1.0000   -3.0000
+         0    4.0000    4.0000   -1.0000
+         0         0   -1.5000    2.2500
+         0         0         0    3.7500
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+U_2~=~
+\left( \begin{array}{rrrr}
+2 &  2 &  1   & -3 \\
+0 &  4 &  4   & -1 \\
+0 &  0 & -1,5 &  2,25 \\
+0 &  0 &  0   &  3,75 
+\end{array} \right)
+$
+\vfill
+\end{minipage}
+
+%% y2
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+y2 =
+
+   -6.0000
+  -13.0000
+    3.7500
+    3.7500
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+y_2~=~
+\left( \begin{array}{r}
+ -6 \\
+-13 \\
+  3,75 \\
+  3,75
+\end{array} \right)
+$
+\vfill
+\end{minipage}
+
+%% Zpětné %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\par Zpětné dosazení:
+
+\begin{verbatim}
+>> [x2] = back(U2, y2)
+\end{verbatim}
+
+%% x2
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+x2 =
+
+     1
+    -2
+    -1
+     1
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+\overline{x_2}~=~
+\left( \begin{array}{r}
+  1 \\
+ -2 \\
+ -1 \\
+  1
+\end{array} \right)
+$
+\vfill
+\end{minipage}
+
+
+
+\newpage
+\section{Pomocí Jacobiovy nebo Gauss-Seidelovou metodou řešte soustavy lineárních algebraických
+rovnic. Ověřujte podmínky konvergence a~soustavu případně upravte tak, aby byla použitá metoda
+konvergentní.}
+
+$
+b)~
+\left( \begin{array}{rrr|r}
+1 & 5 & 7 & -2 \\
+9 & 5 & 3 &  2 \\
+2 & 7 & 4 & -8
+\end{array} \right)
+$
+
+\par {~}
+
+%%%% Výpočet %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\par Jsou použity funkce z~\path{N:\UKAZKY\Prazak\NUMA\B_cviceni\cv04\matlab}. \\
+
+
+\par Zadání matice A:
+
+\begin{verbatim}
+>> A = [[1, 5, 7, -2]; [9, 5, 3, 2]; [2, 7, 4, -8]]
+\end{verbatim}
+
+
+%% Výpis - zadání A %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+A =
+
+     1     5     7    -2
+     9     5     3     2
+     2     7     4    -8
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+A~=~
+\left( \begin{array}{rrr|r}
+1 & 5 & 7 & -2 \\
+9 & 5 & 3 &  2 \\
+2 & 7 & 4 & -8
+\end{array} \right)
+$
+
+\vfill
+
+\end{minipage}
+
+\par Byla zvolena Gauss-Seidelova metoda. Čtvercová matice $U$ je regulární, nesymetrická,
+v~tomto tvaru není diagonálně dominantní. Záměnou řádků 1~a~2 a~následnou záměnou řádků
+2~a~3 původní matice $A$ se matice $U$ stává ostře řádkově diagonálně dominantní. Tato
+vlastnost je postačující pro~splnění podmínek konvergence iterační metody. \\
+
+\begin{verbatim}
+>> A([ 1 2 ], :) = A([ 2 1 ], :)
+>> A([ 2 3 ], :) = A([ 3 2 ], :)
+\end{verbatim}
+
+%% Výpis - záměna A %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+A =
+
+     9     5     3     2
+     2     7     4    -8
+     1     5     7    -2
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+A~=~
+\left( \begin{array}{rrr|r}
+9 & 5 & 3 &  2 \\
+2 & 7 & 4 & -8 \\
+1 & 5 & 7 & -2 
+\end{array} \right)
+$
+
+\vfill
+\end{minipage}
+
+%% Matice U %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\par Čtvercová matice:
+
+\begin{verbatim}
+>> U = A([1:3],[1:3])
+\end{verbatim}
+
+%% Výpis - U %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+U =
+
+     9     5     3 
+     2     7     4 
+     1     5     7 
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+U~=~
+\left( \begin{array}{rrr}
+9 & 5 & 3 \\
+2 & 7 & 4 \\
+1 & 5 & 7 
+\end{array} \right)
+$
+
+\vfill
+\end{minipage}
+
+%% Vektor b %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\par Vektor pravých stran:
+
+\begin{verbatim}
+>> b = A([1:3], 4)
+\end{verbatim}
+
+
+%% Vektor b %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+b =
+
+     2
+    -8
+    -2
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+b~=~
+\left( \begin{array}{r}
+  2 \\
+ -8 \\
+ -2
+\end{array} \right)
+$
+\vfill
+\end{minipage}
+
+\newpage
+
+\par Použití Gauss-Seidelovy iterační metody s~maximálním počtem 50~iterací a~prázdným
+počátečním výsledkem:
+
+\begin{verbatim}
+>> x0 = zeros(3, 1)
+>> x = gauss_seidel(U, b, x0, 50)
+\end{verbatim}
+
+%% výsledek x %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+x =
+
+     1
+    -2
+     1
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+\overline{x}~=~
+\left( \begin{array}{r}
+  1 \\
+ -2 \\
+  1
+\end{array} \right)
+$
+\vfill
+\end{minipage}
+
+
+
+\newpage
+\section{Použijte \emph{LU} rozklad matice a~nalezněte determinant matice i~matici inverzní.}
+
+$
+c)~
+\left( \begin{array}{rrr}
+-8 &  1 & -2 \\
+ 2 & -6 & -1 \\
+-3 & -1 &  7 
+\end{array} \right)
+$
+
+\par {~}
+
+%%%% Výpočet %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\par Jsou použity funkce z~\path{N:\UKAZKY\Prazak\NUMA\B_cviceni\cv03\matlab\LU}. \\
+
+
+%% Zadání A %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\par Zadání matice A:
+
+\begin{verbatim}
+>> A = [[-8, 1, -2]; [2, -6, -1]; [-3, -1, 7]]
+\end{verbatim}
+
+
+%% Výpis - zadání A %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+A =
+
+    -8     1    -2
+     2    -6    -1
+    -3    -1     7
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+
+$
+A~=~
+\left( \begin{array}{rrr}
+-8 &  1 & -2 \\
+ 2 & -6 & -1 \\
+-3 & -1 &  7 
+\end{array} \right)
+$
+
+\vfill
+
+\end{minipage}
+
+
+%% Dotaz na LU rozklad %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\par Provedení LU rozkladu matice A:
+
+\begin{verbatim}
+
+>> [L, U] = LU_rozklad(A)
+
+\end{verbatim}
+
+%%% L %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+L =
+
+    1.0000         0         0
+   -0.2500    1.0000         0
+    0.3750    0.2391    1.0000
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+
+$
+A_L~=~
+\left( \begin{array}{rrr}
+  1 &  0 & 0 \\
+ -0,25 & 1 & 0 \\
+  0,375 & 0,2391 &  1 
+\end{array} \right)
+$
+
+\vfill
+
+\end{minipage}
+
+%%% U %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+U =
+
+   -8.0000    1.0000   -2.0000
+         0   -5.7500   -1.5000
+         0         0    8.1087
+
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+
+$
+A_U~=~
+\left( \begin{array}{rrr}
+  -8 &  1 	& -2 \\
+   0 & -5,75 & -1,5 \\
+   0 & 0	&  8,1087 
+\end{array} \right)
+$
+
+\vfill
+
+\end{minipage}
+
+%% dotaz na determinant A %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\par Výpočet determinantu matice A:
+
+\begin{verbatim}
+
+>> detA = determinant(A)
+
+\end{verbatim}
+
+%% výpis determinant A %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+detA =
+
+  373.0000
+  
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+
+$
+\det~A~=~
+\left| \begin{array}{rrr}
+  -8 &  1 	& -2 \\
+   0 & -5,75 & -1,5 \\
+   0 & 0	&  8,1087 
+\end{array} \right|
+~=~373
+$
+
+\vfill
+
+\end{minipage}
+
+%% inverzní matice %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newpage
+\par Inverze matice A:
+
+\begin{verbatim}
+
+>> invA = inv(A)
+
+\end{verbatim}
+
+%% výpis inverzní A %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{minipage}[t]{.5\textwidth}
+\begin{verbatim}
+
+invA =
+
+   -0.1153   -0.0134   -0.0349
+   -0.0295   -0.1662   -0.0322
+   -0.0536   -0.0295    0.1233
+  
+\end{verbatim}
+\end{minipage}%
+\begin{minipage}[t]{.5\textwidth}
+
+\bigskip
+\bigskip
+
+$
+A^{-1}~=~
+\left( \begin{array}{rrr}
+   -0,1153  & -0,0134  & -0,0349 \\
+   -0,0295  & -0,1662  & -0,0322 \\
+   -0,0536  & -0,0295  &  0,1233
+\end{array} \right)
+$
+
+\vfill
+
+\end{minipage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%----------------------------------------------------------------------------------------
+% KONEC
+%----------------------------------------------------------------------------------------
+
+\end{document}

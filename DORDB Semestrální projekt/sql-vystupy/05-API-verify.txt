@@ -1,0 +1,518 @@
+> -- 1) změna oddělení zaměstnance
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- vytvoření pokusného zaměstnance
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> INSERT INTO Zamestnanec (zamestnanecID, jmeno, prijmeni, adresaID) VALUES (10001, 'Franta', 'Novák TESTAPI1', 1)
+1 rows inserted.
+ 
+----------------------------------------------------------------------------------------
+| Id  | Operation                | Name        | Rows  | Bytes | Cost (%CPU)| Time     |
+----------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT         |             |     1 |    24 |     1   (0)| 00:00:01 |
+|   1 |  LOAD TABLE CONVENTIONAL | ZAMESTNANEC |       |       |            |          |
+----------------------------------------------------------------------------------------
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- vytvoření pracovního poměru 1
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> INSERT INTO PracovniPomer (do,od,uvazek,pozice,zamestnanecID)
+VALUES (
+to_date('2030-12-30', 'YYYY-MM-DD'),
+to_date('2000-01-01', 'YYYY-MM-DD'),
+35, 'Tester API1',
+(SELECT zamestnanecID FROM Zamestnanec WHERE prijmeni LIKE '%TESTAPI1')
+)
+1 rows inserted.
+ 
+------------------------------------------------------------------------------------------
+| Id  | Operation                | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT         |               |     1 |    42 |     1   (0)| 00:00:01 |
+|   1 |  LOAD TABLE CONVENTIONAL | PRACOVNIPOMER |       |       |            |          |
+------------------------------------------------------------------------------------------
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- vytvoření pracovního poměru 2
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> INSERT INTO PracovniPomer (do,od,uvazek,pozice,zamestnanecID)
+VALUES (
+to_date('2050-07-07', 'YYYY-MM-DD'),
+to_date('2010-06-06', 'YYYY-MM-DD'),
+5, 'Loskuták API1',
+(SELECT zamestnanecID FROM Zamestnanec WHERE prijmeni LIKE '%TESTAPI1')
+)
+1 rows inserted.
+ 
+------------------------------------------------------------------------------------------
+| Id  | Operation                | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT         |               |     1 |    42 |     1   (0)| 00:00:01 |
+|   1 |  LOAD TABLE CONVENTIONAL | PRACOVNIPOMER |       |       |            |          |
+------------------------------------------------------------------------------------------
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- přiřazení pracovního poměru 1 k prvnímu oddělení
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> INSERT INTO pomerOddeleni (oddeleniID, pracovniPomerID)
+VALUES (1,
+(SELECT pracovniPomerID FROM PracovniPomer WHERE pozice LIKE 'Tester API1')
+)
+1 rows inserted.
+ 
+------------------------------------------------------------------------------------------
+| Id  | Operation                | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT         |               |     1 |     8 |     1   (0)| 00:00:01 |
+|   1 |  LOAD TABLE CONVENTIONAL | POMERODDELENI |       |       |            |          |
+------------------------------------------------------------------------------------------
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- přiřazení pracovního poměru 2 k šestému oddělení
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> INSERT INTO pomerOddeleni (oddeleniID, pracovniPomerID)
+VALUES (6,
+(SELECT pracovniPomerID FROM PracovniPomer WHERE pozice LIKE 'Loskuták API1')
+)
+1 rows inserted.
+ 
+------------------------------------------------------------------------------------------
+| Id  | Operation                | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT         |               |     1 |     8 |     1   (0)| 00:00:01 |
+|   1 |  LOAD TABLE CONVENTIONAL | POMERODDELENI |       |       |            |          |
+------------------------------------------------------------------------------------------
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- ověření původního stavu
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> SELECT Zamestnanec.jmeno, Zamestnanec.prijmeni, PracovniPomer.uvazek, PracovniPomer.od, PracovniPomer.do, Oddeleni.nazev AS predchoziODD
+FROM Zamestnanec
+LEFT JOIN PracovniPomer ON (PracovniPomer.zamestnanecID = Zamestnanec.zamestnanecID)
+LEFT JOIN PomerOddeleni ON (PomerOddeleni.pracovniPomerID = PracovniPomer.pracovniPomerID)
+LEFT JOIN Oddeleni ON (Oddeleni.oddeleniID = PomerOddeleni.oddeleniID)
+WHERE Zamestnanec.prijmeni LIKE '%API1'
+JMENO                                                                                                                                                                                                                                                           PRIJMENI                                                                                                                                                                                                                                                            UVAZEK OD       DO       PREDCHOZIODD                                                                                                                                                                                                                                                  
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------- -------- -------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Franta                                                                                                                                                                                                                                                          Novák TESTAPI1                                                                                                                                                                                                                                                          35 01.01.00 30.12.30 Nam Tempor Diam Corp.                                                                                                                                                                                                                                           
+Franta                                                                                                                                                                                                                                                          Novák TESTAPI1                                                                                                                                                                                                                                                           5 06.06.10 07.07.50 Sociis Natoque Foundation                                                                                                                                                                                                                                       
+
+Plan hash value: 3262821891
+ 
+--------------------------------------------------------------------------------------
+| Id  | Operation            | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+--------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT     |               |    50 |  4000 |    16  (13)| 00:00:01 |
+|*  1 |  HASH JOIN OUTER     |               |    50 |  4000 |    16  (13)| 00:00:01 |
+|*  2 |   HASH JOIN OUTER    |               |    50 |  2700 |    12   (9)| 00:00:01 |
+|*  3 |    HASH JOIN OUTER   |               |    50 |  2300 |     9  (12)| 00:00:01 |
+|*  4 |     TABLE ACCESS FULL| ZAMESTNANEC   |    50 |   950 |     3   (0)| 00:00:01 |
+|   5 |     TABLE ACCESS FULL| PRACOVNIPOMER |   988 | 26676 |     5   (0)| 00:00:01 |
+|   6 |    TABLE ACCESS FULL | POMERODDELENI |   678 |  5424 |     3   (0)| 00:00:01 |
+|   7 |   TABLE ACCESS FULL  | ODDELENI      |   279 |  7254 |     3   (0)| 00:00:01 |
+--------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   1 - access("ODDELENI"."ODDELENIID"(+)="POMERODDELENI"."ODDELENIID")
+   2 - access("POMERODDELENI"."PRACOVNIPOMERID"(+)="PRACOVNIPOMER"."PRACOVNIPO
+              MERID")
+   3 - access("PRACOVNIPOMER"."ZAMESTNANECID"(+)="ZAMESTNANEC"."ZAMESTNANECID"
+              )
+   4 - filter("ZAMESTNANEC"."PRIJMENI" LIKE '%API1')
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- samotná změna oddělení uživatele 10001 z 1 do 2
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> BEGIN
+	kavarny_api.zmena_odd(10001, 1, 2);
+END;
+anonymous block completed
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- ověření nového stavu
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> SELECT Zamestnanec.jmeno, Zamestnanec.prijmeni, PracovniPomer.uvazek, PracovniPomer.od, PracovniPomer.do, Oddeleni.nazev AS noveODD
+FROM Zamestnanec
+LEFT JOIN PracovniPomer ON (PracovniPomer.zamestnanecID = Zamestnanec.zamestnanecID)
+LEFT JOIN PomerOddeleni ON (PomerOddeleni.pracovniPomerID = PracovniPomer.pracovniPomerID)
+LEFT JOIN Oddeleni ON (Oddeleni.oddeleniID = PomerOddeleni.oddeleniID)
+WHERE Zamestnanec.prijmeni LIKE '%API1'
+JMENO                                                                                                                                                                                                                                                           PRIJMENI                                                                                                                                                                                                                                                            UVAZEK OD       DO       NOVEODD                                                                                                                                                                                                                                                       
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ---------- -------- -------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Franta                                                                                                                                                                                                                                                          Novák TESTAPI1                                                                                                                                                                                                                                                          35 01.01.00 05.01.16 Nam Tempor Diam Corp.                                                                                                                                                                                                                                           
+Franta                                                                                                                                                                                                                                                          Novák TESTAPI1                                                                                                                                                                                                                                                             16.01.06          Dictum Phasellus Incorporated                                                                                                                                                                                                                                   
+Franta                                                                                                                                                                                                                                                          Novák TESTAPI1                                                                                                                                                                                                                                                           5 06.06.10 07.07.50 Sociis Natoque Foundation                                                                                                                                                                                                                                       
+
+Plan hash value: 3262821891
+ 
+--------------------------------------------------------------------------------------
+| Id  | Operation            | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+--------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT     |               |    50 |  4000 |    16  (13)| 00:00:01 |
+|*  1 |  HASH JOIN OUTER     |               |    50 |  4000 |    16  (13)| 00:00:01 |
+|*  2 |   HASH JOIN OUTER    |               |    50 |  2700 |    12   (9)| 00:00:01 |
+|*  3 |    HASH JOIN OUTER   |               |    50 |  2300 |     9  (12)| 00:00:01 |
+|*  4 |     TABLE ACCESS FULL| ZAMESTNANEC   |    50 |   950 |     3   (0)| 00:00:01 |
+|   5 |     TABLE ACCESS FULL| PRACOVNIPOMER |   988 | 26676 |     5   (0)| 00:00:01 |
+|   6 |    TABLE ACCESS FULL | POMERODDELENI |   678 |  5424 |     3   (0)| 00:00:01 |
+|   7 |   TABLE ACCESS FULL  | ODDELENI      |   279 |  7254 |     3   (0)| 00:00:01 |
+--------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   1 - access("ODDELENI"."ODDELENIID"(+)="POMERODDELENI"."ODDELENIID")
+   2 - access("POMERODDELENI"."PRACOVNIPOMERID"(+)="PRACOVNIPOMER"."PRACOVNIPO
+              MERID")
+   3 - access("PRACOVNIPOMER"."ZAMESTNANECID"(+)="ZAMESTNANEC"."ZAMESTNANECID"
+              )
+   4 - filter("ZAMESTNANEC"."PRIJMENI" LIKE '%API1')
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- opětovné odstranění pokusného zaměstnance
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> DELETE FROM PomerOddeleni WHERE pracovniPomerID IN (
+SELECT pracovniPomerID FROM PracovniPomer WHERE zamestnanecID IN (
+SELECT zamestnanecID FROM Zamestnanec WHERE prijmeni LIKE '%API1'))
+3 rows deleted.
+Plan hash value: 3073189395
+ 
+---------------------------------------------------------------------------------------
+| Id  | Operation             | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+---------------------------------------------------------------------------------------
+|   0 | DELETE STATEMENT      |               |    50 |  1050 |    12   (9)| 00:00:01 |
+|   1 |  DELETE               | POMERODDELENI |       |       |            |          |
+|*  2 |   HASH JOIN RIGHT SEMI|               |    50 |  1050 |    12   (9)| 00:00:01 |
+|   3 |    VIEW               | VW_NSO_1      |    50 |   650 |     9  (12)| 00:00:01 |
+|*  4 |     HASH JOIN         |               |    50 |  1000 |     9  (12)| 00:00:01 |
+|*  5 |      TABLE ACCESS FULL| ZAMESTNANEC   |    50 |   600 |     3   (0)| 00:00:01 |
+|   6 |      TABLE ACCESS FULL| PRACOVNIPOMER |   988 |  7904 |     5   (0)| 00:00:01 |
+|   7 |    TABLE ACCESS FULL  | POMERODDELENI |   678 |  5424 |     3   (0)| 00:00:01 |
+---------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("PRACOVNIPOMERID"="PRACOVNIPOMERID")
+   4 - access("ZAMESTNANECID"="ZAMESTNANECID")
+   5 - filter("PRIJMENI" LIKE '%API1')
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> DELETE FROM PracovniPomer WHERE zamestnanecID IN (SELECT zamestnanecID FROM Zamestnanec WHERE prijmeni LIKE '%API1')
+3 rows deleted.
+Plan hash value: 2404080745
+ 
+-------------------------------------------------------------------------------------
+| Id  | Operation           | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+-------------------------------------------------------------------------------------
+|   0 | DELETE STATEMENT    |               |    50 |  1950 |     9  (12)| 00:00:01 |
+|   1 |  DELETE             | PRACOVNIPOMER |       |       |            |          |
+|*  2 |   HASH JOIN         |               |    50 |  1950 |     9  (12)| 00:00:01 |
+|*  3 |    TABLE ACCESS FULL| ZAMESTNANEC   |    50 |   600 |     3   (0)| 00:00:01 |
+|   4 |    TABLE ACCESS FULL| PRACOVNIPOMER |   988 | 26676 |     5   (0)| 00:00:01 |
+-------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("ZAMESTNANECID"="ZAMESTNANECID")
+   3 - filter("PRIJMENI" LIKE '%API1')
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> DELETE FROM Zamestnanec WHERE prijmeni LIKE '%API1'
+1 rows deleted.
+Plan hash value: 4133077801
+ 
+----------------------------------------------------------------------------------
+| Id  | Operation          | Name        | Rows  | Bytes | Cost (%CPU)| Time     |
+----------------------------------------------------------------------------------
+|   0 | DELETE STATEMENT   |             |    50 |   800 |     3   (0)| 00:00:01 |
+|   1 |  DELETE            | ZAMESTNANEC |       |       |            |          |
+|*  2 |   TABLE ACCESS FULL| ZAMESTNANEC |    50 |   800 |     3   (0)| 00:00:01 |
+----------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - filter("PRIJMENI" LIKE '%API1')
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> ------------------------------------------------------------------------------------------
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- 2) vyvolání manažera
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- vytvoření pokusného zaměstnance
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> INSERT INTO Zamestnanec (zamestnanecID, jmeno, prijmeni, adresaID) VALUES (10002, 'Pepa', 'Novák TESTAPI2', 1)
+1 rows inserted.
+ 
+----------------------------------------------------------------------------------------
+| Id  | Operation                | Name        | Rows  | Bytes | Cost (%CPU)| Time     |
+----------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT         |             |     1 |    24 |     1   (0)| 00:00:01 |
+|   1 |  LOAD TABLE CONVENTIONAL | ZAMESTNANEC |       |       |            |          |
+----------------------------------------------------------------------------------------
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- vytvoření pracovního poměru 1 - úvazek 35
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> INSERT INTO PracovniPomer (do,od,uvazek,pozice,zamestnanecID)
+VALUES (
+to_date('2030-12-30', 'YYYY-MM-DD'),
+to_date('2000-01-01', 'YYYY-MM-DD'),
+35, 'Tester API2',
+(SELECT zamestnanecID FROM Zamestnanec WHERE prijmeni LIKE '%TESTAPI2')
+)
+1 rows inserted.
+ 
+------------------------------------------------------------------------------------------
+| Id  | Operation                | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT         |               |     1 |    42 |     1   (0)| 00:00:01 |
+|   1 |  LOAD TABLE CONVENTIONAL | PRACOVNIPOMER |       |       |            |          |
+------------------------------------------------------------------------------------------
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- vytvoření pracovního poměru 2 - úvazek 5
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> INSERT INTO PracovniPomer (do,od,uvazek,pozice,zamestnanecID)
+VALUES (
+to_date('2050-07-07', 'YYYY-MM-DD'),
+to_date('2010-06-06', 'YYYY-MM-DD'),
+5, 'Loskuták API2',
+(SELECT zamestnanecID FROM Zamestnanec WHERE prijmeni LIKE '%TESTAPI2')
+)
+1 rows inserted.
+ 
+------------------------------------------------------------------------------------------
+| Id  | Operation                | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT         |               |     1 |    42 |     1   (0)| 00:00:01 |
+|   1 |  LOAD TABLE CONVENTIONAL | PRACOVNIPOMER |       |       |            |          |
+------------------------------------------------------------------------------------------
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- přiřazení pracovního poměru 1 k prvnímu oddělení
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> INSERT INTO pomerOddeleni (oddeleniID, pracovniPomerID)
+VALUES (1,
+(SELECT pracovniPomerID FROM PracovniPomer WHERE pozice LIKE 'Tester API2')
+)
+1 rows inserted.
+ 
+------------------------------------------------------------------------------------------
+| Id  | Operation                | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT         |               |     1 |     8 |     1   (0)| 00:00:01 |
+|   1 |  LOAD TABLE CONVENTIONAL | POMERODDELENI |       |       |            |          |
+------------------------------------------------------------------------------------------
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- přiřazení pracovního poměru 2 k šestému oddělení
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> INSERT INTO pomerOddeleni (oddeleniID, pracovniPomerID)
+VALUES (6,
+(SELECT pracovniPomerID FROM PracovniPomer WHERE pozice LIKE 'Loskuták API2')
+)
+1 rows inserted.
+ 
+------------------------------------------------------------------------------------------
+| Id  | Operation                | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+------------------------------------------------------------------------------------------
+|   0 | INSERT STATEMENT         |               |     1 |     8 |     1   (0)| 00:00:01 |
+|   1 |  LOAD TABLE CONVENTIONAL | POMERODDELENI |       |       |            |          |
+------------------------------------------------------------------------------------------
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- celkový úvazek 35+5 = 40, manažer může mít jen 20
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- 75 - In Tempus Eu Incorporated, manažer 293 (Stella Young)
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> SELECT CONCAT(CONCAT(Zamestnanec.jmeno, ' '), Zamestnanec.prijmeni) AS manazer, OrgJednotka.orgJednotkaID, OrgJednotka.nazev
+FROM OrgJednotka
+LEFT JOIN Zamestnanec ON (OrgJednotka.zamestnanecID = Zamestnanec.zamestnanecID)
+WHERE OrgJednotka.orgJednotkaID = 75
+MANAZER                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ORGJEDNOTKAID NAZEV                                                                                                                                                                                                                                                         
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Stella Young                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               75 In Tempus Eu Incorporated                                                                                                                                                                                                                                       
+
+Plan hash value: 3514155367
+ 
+----------------------------------------------------------------------------------------------
+| Id  | Operation                    | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+----------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT             |               |     1 |    47 |     2   (0)| 00:00:01 |
+|   1 |  NESTED LOOPS OUTER          |               |     1 |    47 |     2   (0)| 00:00:01 |
+|   2 |   TABLE ACCESS BY INDEX ROWID| ORGJEDNOTKA   |     1 |    28 |     1   (0)| 00:00:01 |
+|*  3 |    INDEX UNIQUE SCAN         | SYS_C00171289 |     1 |       |     0   (0)| 00:00:01 |
+|   4 |   TABLE ACCESS BY INDEX ROWID| ZAMESTNANEC   |   999 | 18981 |     1   (0)| 00:00:01 |
+|*  5 |    INDEX UNIQUE SCAN         | SYS_C00171300 |     1 |       |     0   (0)| 00:00:01 |
+----------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   3 - access("ORGJEDNOTKA"."ORGJEDNOTKAID"=75)
+   5 - access("ORGJEDNOTKA"."ZAMESTNANECID"="ZAMESTNANEC"."ZAMESTNANECID"(+))
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- vyrobení manažera
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> BEGIN
+	kavarny_api.novy_manager(10002, 75);
+END;
+anonymous block completed
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- ověření
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> SELECT CONCAT(CONCAT(Zamestnanec.jmeno, ' '), Zamestnanec.prijmeni) AS manazer, OrgJednotka.orgJednotkaID, OrgJednotka.nazev
+FROM OrgJednotka
+LEFT JOIN Zamestnanec ON (OrgJednotka.zamestnanecID = Zamestnanec.zamestnanecID)
+WHERE OrgJednotka.orgJednotkaID = 75
+MANAZER                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ORGJEDNOTKAID NAZEV                                                                                                                                                                                                                                                         
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- ------------- ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Pepa Novák TESTAPI2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        75 In Tempus Eu Incorporated                                                                                                                                                                                                                                       
+
+Plan hash value: 3514155367
+ 
+----------------------------------------------------------------------------------------------
+| Id  | Operation                    | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+----------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT             |               |     1 |    47 |     2   (0)| 00:00:01 |
+|   1 |  NESTED LOOPS OUTER          |               |     1 |    47 |     2   (0)| 00:00:01 |
+|   2 |   TABLE ACCESS BY INDEX ROWID| ORGJEDNOTKA   |     1 |    28 |     1   (0)| 00:00:01 |
+|*  3 |    INDEX UNIQUE SCAN         | SYS_C00171289 |     1 |       |     0   (0)| 00:00:01 |
+|   4 |   TABLE ACCESS BY INDEX ROWID| ZAMESTNANEC   |   999 | 18981 |     1   (0)| 00:00:01 |
+|*  5 |    INDEX UNIQUE SCAN         | SYS_C00171300 |     1 |       |     0   (0)| 00:00:01 |
+----------------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   3 - access("ORGJEDNOTKA"."ORGJEDNOTKAID"=75)
+   5 - access("ORGJEDNOTKA"."ZAMESTNANECID"="ZAMESTNANEC"."ZAMESTNANECID"(+))
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- vrácení zpátky
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> BEGIN
+	kavarny_api.novy_manager(293, 75);
+END;
+anonymous block completed
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> -- opětovné odstranění pokusného zaměstnance
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> DELETE FROM PomerOddeleni WHERE pracovniPomerID IN (
+SELECT pracovniPomerID FROM PracovniPomer WHERE zamestnanecID IN (
+SELECT zamestnanecID FROM Zamestnanec WHERE prijmeni LIKE '%API2'))
+2 rows deleted.
+Plan hash value: 3073189395
+ 
+---------------------------------------------------------------------------------------
+| Id  | Operation             | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+---------------------------------------------------------------------------------------
+|   0 | DELETE STATEMENT      |               |    50 |  1050 |    12   (9)| 00:00:01 |
+|   1 |  DELETE               | POMERODDELENI |       |       |            |          |
+|*  2 |   HASH JOIN RIGHT SEMI|               |    50 |  1050 |    12   (9)| 00:00:01 |
+|   3 |    VIEW               | VW_NSO_1      |    50 |   650 |     9  (12)| 00:00:01 |
+|*  4 |     HASH JOIN         |               |    50 |  1000 |     9  (12)| 00:00:01 |
+|*  5 |      TABLE ACCESS FULL| ZAMESTNANEC   |    50 |   600 |     3   (0)| 00:00:01 |
+|   6 |      TABLE ACCESS FULL| PRACOVNIPOMER |   988 |  7904 |     5   (0)| 00:00:01 |
+|   7 |    TABLE ACCESS FULL  | POMERODDELENI |   678 |  5424 |     3   (0)| 00:00:01 |
+---------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("PRACOVNIPOMERID"="PRACOVNIPOMERID")
+   4 - access("ZAMESTNANECID"="ZAMESTNANECID")
+   5 - filter("PRIJMENI" LIKE '%API2')
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> DELETE FROM PracovniPomer WHERE zamestnanecID IN (SELECT zamestnanecID FROM Zamestnanec WHERE prijmeni LIKE '%API2')
+4 rows deleted.
+Plan hash value: 2404080745
+ 
+-------------------------------------------------------------------------------------
+| Id  | Operation           | Name          | Rows  | Bytes | Cost (%CPU)| Time     |
+-------------------------------------------------------------------------------------
+|   0 | DELETE STATEMENT    |               |    50 |  1950 |     9  (12)| 00:00:01 |
+|   1 |  DELETE             | PRACOVNIPOMER |       |       |            |          |
+|*  2 |   HASH JOIN         |               |    50 |  1950 |     9  (12)| 00:00:01 |
+|*  3 |    TABLE ACCESS FULL| ZAMESTNANEC   |    50 |   600 |     3   (0)| 00:00:01 |
+|   4 |    TABLE ACCESS FULL| PRACOVNIPOMER |   988 | 26676 |     5   (0)| 00:00:01 |
+-------------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - access("ZAMESTNANECID"="ZAMESTNANECID")
+   3 - filter("PRIJMENI" LIKE '%API2')
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> DELETE FROM Zamestnanec WHERE prijmeni LIKE '%API2'
+1 rows deleted.
+Plan hash value: 4133077801
+ 
+----------------------------------------------------------------------------------
+| Id  | Operation          | Name        | Rows  | Bytes | Cost (%CPU)| Time     |
+----------------------------------------------------------------------------------
+|   0 | DELETE STATEMENT   |             |    50 |   800 |     3   (0)| 00:00:01 |
+|   1 |  DELETE            | ZAMESTNANEC |       |       |            |          |
+|*  2 |   TABLE ACCESS FULL| ZAMESTNANEC |    50 |   800 |     3   (0)| 00:00:01 |
+----------------------------------------------------------------------------------
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   2 - filter("PRIJMENI" LIKE '%API2')
+
+Unable to gather statistics please unsure user has correct access.
+The statistic feature requires that the user is granted select on v_$sesstat, v_$statname and v_$session.
+> set AUTOTRACE OFF
+Autotrace Disabled
